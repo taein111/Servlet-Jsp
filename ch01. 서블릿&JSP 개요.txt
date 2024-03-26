@@ -1,0 +1,144 @@
+ch01. 서블릿&JSP 개요
+
+-HTML만으로는 매일 매일 변경되는 새로운 정보들을 제공해주지 못한다
+ 왜냐하면 HTML은 같은 내용만 표시해주는 정적인 페이지이기 때문.
+우리가 사용하는 인터넷은 매일 매일 새로운 내용을 제공해주어야 하기 때문에 HTML만 가지고 웹 프로그래밍을 하는 데 문제가 있다.
+
+-그래서 등장하게 된 것이 동적인 페이지(서블릿 /JSP)
+
+-동적 페이지에서 새로운 정보를 제공해주기 위해서는 방대한 정보를 관리할 데이터베이스가 필요합니다. 
+
+-예를 들어 게시판에 게재되는 글은 데이터베이스에 저장되었다가 보여주는 것
+이렇듯 다양한 정보를 데이터베이스에서 얻거나 저장해야 하기 위해서 등장한 언어가 PHP, ASP, 서블릿/JSP
+
+
+ 
+**이클립스에서 인코딩 방식을 UTF-8로 변경하기
+
+
+*서블릿(Servlet)
+-서블릿(Servlet)은 Server + Applet의 합성어로 서버 상에서 실행되는 Applet이란 의미로 
+자바를 이용하여 웹상에서 실행되는 프로그램을 작성하는 기술
+
+-서블릿은 자바 클래스 형태의 웹 애플리케이션을 말하는데, 브라우저를 통해 자바 클래스가 실행되도록 하기 위해서는
+ javax.servlet.http 패키지에서 제공하는 HttpServlet 클래스를 상속받아 구현해야 한다.
+ HttpServlet 클래스를 상속 받아 만든 서브 클래스를 서블릿 클래스라고 한다.
+
+-서블릿 동작 방식은 클라이언트가 어떻게 서버에 요청하는지 살펴봐야한다. 
+ ->클라이언트는 서버에 get과 post 두 가지 방식 중 하나로 요청을 한다. 두 전송 방식의 차이점은
+
+
+get 방식 :주소 창을 타고 넘어가기 때문에 서버로 보내는 데이터를 사용자가 그대로 볼 수 있다. 
+보안에 취약하다. 255자 이하의 소용량의 데이터를 전송한다.
+
+ post 방식 :html header 타고 넘어가기 때문에 보안이 강하다. 
+255자 이상의 대용량의 데이터를 전송한다.
+
+
+-서블릿 클래스에는 doGet() 혹은 doPost()가 있으며,  요청 방식에 따라 호출되는 메서드가 달라진다.
+
+-get 방식으로 요청하면 doGet()이 호출되고, post방식으로 요청하면 doPost()가 호출된다.
+
+-요청 방식에 따라 doGet() 혹은 doPost() 메소드 내부에 호출되었을 때 해야 할 일을 써 넣어야 한다..
+
+<form action=“CallServlet">  //요청할 서블릿 이름을 action
+<input type="submit" value="전송"> // sumit(전송)을 클릭하면 서블릿이 요청된다.
+</form>
+
+■ 예 : <form> 태그를 이용한 get 방식의 요청
+
+<form method="get" action="CallServlet">
+<input type="submit" value="전송">
+</form>
+
+■ 예 : <form> 태그를 이용한 post 방식의 요청
+<form method="post" action="CallServlet">
+<input type="submit" value="전송">
+</form>
+
+*<form> 태그 외에도 HTML의 <a> 태그를 사용하여 링크를 걸어 주면 서블릿은 get 방식으로 요청한 것으로 인식한다.
+■ 예 : <a> 태그 이용한 get 방식의 요청
+	<a href="CallServlet"> get 방식의 요청 </a>
+
+*주소 입력란에서 직접 서블릿 요청을 위한 URL을 입력하여도 get 방식으로 요청한 것으로 인식한다. 
+
+
+
+----------------------------------------------------------------------------------------------
+					//요청처리				//응답처리							
+**public void doGet(HttpServletRequest request, HttpServletResponse response)
+               throws IOException, ServletException//예외처리
+{
+
+}
+-------------------------------------------------------------------------------------------------
+=> doGet() 메소드는 throws 절로 메소드에서 발생하는 IOException, ServletException 예외를 외부에서 처리하도록 정의되어 있고
+ 두 개의 매개변수를 갖는다.
+
+HttpServletRequest 형으로 선언된 첫 번째 매개변수는 클라이언트의 요청(request)을 처리하고, 
+
+HttpServletResponse 형으로 선언된 두 번째 매개변수는 요청 처리 결과를 클라이언트에게 되돌리기(응답하기, response) 위해 사용된다. 
+
+
+----------------------------------------------------------------------------------------------
+					//요청처리				//응답처리							
+**public void doGet(HttpServletRequest request, HttpServletResponse response)
+               throws IOException, ServletException//예외처리
+{
+       PrintWriter out = response.getWriter();
+
+}
+-------------------------------------------------------------------------------------------------
+=> 서버가 요청에 대한 처리를 마치고 클라이언트에게 결과를 되돌려 주기 위해서는 
+doGet()혹은 doPost()의 두번째 매개변수인 
+HttpServletRequest로부터 PrintWriter 형의 출력 스트림 객체를 얻어 와야 한다.
+PrintWriter 출력 스트림 객체의 println()을 호출하면 브라우저에 HTML 코드를 보내주어 결과를 얻어 볼 수 있게 된다.
+
+■ 예 : HTML 코드로 처리 결과를 보냄
+-------------------------------------------------------------------------------------------------
+public void doGet( HttpServletRequest request, 
+                           HttpServletResponse response)
+               throws IOException, ServletException
+{
+PrintWriter out = response.getWriter();
+ out.println("<html><head><title>Additon</title></head>");
+}
+-------------------------------------------------------------------------------------------------
+
+
+--<<JSP>>
+-JSP는 Java Server Page의 줄임말로 자바로 서버 페이지를 작성하기 위한 언어. 
+
+-서블릿은 자바 코드 내부에 HTML 코드가 들어가는 구조인 데 비해 JSP는 이와 상반되게
+ HTML 문서 내부에 자바 코드가 들어가는 구조.
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+<html>
+<head>
+<title>Addition</title>
+</head>
+<body>
+<%
+int num1 = 20;
+int num2 = 10;
+int add = num1 + num2;
+%>
+<%=nunum1%>+<%=m2%>=<%=add%>
+</body>
+</html>
+
+-<%@ page %> 태그가 사용되었는데 이 태그는 해당 페이지 내에 사용되는 전반적인 환경을 결정해주는 태그
+
+
+이 페이지에서 language="java"는 사용하는 언어가 자바이며 contentType="text/html;는 이페이지가 html 문서이며 charset=UTF-8 pageEncoding="UTF-8"는 한글 인코딩을 UTF-8로 처리하겠다는 의미
+
+
+<% %> 태그를 스크립트릿(scriptlet)이라고 하고 <%= %> 태그는 표현식(expression)이라고 한다.
+
+JSP 페이지에 기술한 내용은 HTML로 간주되기 때문에 자바 코드를 기술하기 위해서는 <% %> 태그 내부에 기술해야 하며 변수에 저장된 값이나 함수의 결과값을 출력하기 위해서는 <%= %> 태그를 사용합니다. 
+
+
+ 
+
+
