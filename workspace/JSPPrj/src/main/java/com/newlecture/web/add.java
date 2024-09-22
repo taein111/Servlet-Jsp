@@ -25,7 +25,6 @@ public class add extends HttpServlet {
 		if(!x_.equals("")) x = Integer.parseInt(x_);
 		if(!y_.equals("")) y = Integer.parseInt(y_);
 		
-	
 		int result = x+y;
 		response.getWriter().printf("result is %d\n", result);
 		
