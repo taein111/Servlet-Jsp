@@ -1,3 +1,4 @@
+<%@page import="java.sql.Date"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
@@ -5,25 +6,8 @@
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-
- <%
- 
- 		int id = Integer.parseInt(request.getParameter("id"));//여기서 getParameter를 통해 
- 		//가져오는 값은 list 페이지의 제목을 클릭했을때 하이퍼링크 url (detail.jsp?id=)  를 통해 가져오는 것
- 
- 		String url = "jdbc:oracle:thin:@localhost:1521/xe";
- 		String sql = "SELECT * FROM NOTICE WHERE ID=?"; //물음표에다가 값을 넣어줘야 한다. 
- 		
- 		Class.forName("oracle.jdbc.driver.OracleDriver");
- 		Connection con = DriverManager.getConnection(url, "scott", "tiger");
- 		PreparedStatement st = con.prepareStatement(sql); //prepared는 는 쿼리문을 미리 준비한다 
- 		st.setInt(1, id); //첫번째 물음표에다가  id를 꽂아 넣겠다.
- 		ResultSet rs = st.executeQuery();
- 		
- 		rs.next();
- 		
- %>  
+    
+    
 <!DOCTYPE html>
 <html>
 
@@ -173,24 +157,24 @@
 							<tbody>
 								<tr>
 									<th>제목</th>
-									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%= rs.getString("TITLE") %></td>
+									<td class="text-align-left text-indent text-strong text-orange" colspan="3">${n.title}</td>
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3"><%= rs.getDate("REGDATE") %>	</td>
+									<td class="text-align-left text-indent" colspan="3">${n.regdate}</td>
 								</tr>
 								<tr>
-									<th><%= rs.getString("WRITER_ID") %></th>
-									<td>newlec</td>
+									<th></th>
+									<td>${n.writerId}</td>
 									<th>조회수</th>
-									<td><%= rs.getString("HIT") %></td>
+									<td>${n.hit}</td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3"><%= rs.getString("FILES") %></td>
+									<td colspan="3">${n.files}</td>
 								</tr>
 								<tr class="content">
-									<td colspan="4"><%= rs.getString("CONTENT") %></td>
+									<td colspan="4">${n.content}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -266,8 +250,4 @@
     </html>
     
     
-      <%
-    						rs.close();
-                       		st.close();
-                        	con.close();
-    %>
+     
