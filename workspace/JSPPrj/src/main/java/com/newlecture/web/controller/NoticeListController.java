@@ -69,7 +69,7 @@ public class NoticeListController extends HttpServlet {
  		request.setAttribute("list", list);
  		//forward (작업했던 내용을 이어받아 처리하는 방식)
  		request
- 		.getRequestDispatcher("/notice/list.jsp")
+ 		.getRequestDispatcher("/WEB-INF/view/notice/list.jsp")
  		.forward(request, response);//notice안에있는 detail.jsp를 요청하면서
  		//현재 사용하고 있는 저장소 객체와 출력도구를 같이 공유함 
  		
