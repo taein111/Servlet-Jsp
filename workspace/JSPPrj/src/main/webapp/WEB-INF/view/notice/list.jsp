@@ -3,7 +3,9 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>   
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+ <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>   
+    
     
 <!DOCTYPE html>
 <html>
@@ -190,7 +192,7 @@
 						<td>${n.id}</td>
 						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a></td>
 						<td>${n.writerId}</td>
-						<td>${n.regdate}</td>
+						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${n.regdate}"/></td>
 						<td>${n.hit}</td>
 					</tr>
 					</c:forEach>			
@@ -210,21 +212,34 @@
 			<div class="margin-top align-center pager">	
 		
 	<div>
-		
-		
+		<!-- 	임시변수를 만들때 쓸 수 있는 태그, 
+	startNum은 page연산식을 가지고 값을 얻어서 pageContext에 저장이 된다.
+	page또한 변수를 만들어서 p가 전달되지 못할경우(list페이지 처음 들어갈 경우)도
+	 null 처리를 해줘야한다 -->
+	<c:set var="page" value="${(param.p ==null)?1:param.p}" />
+	<c:set var="startNum" value="${page-(page-1)%5}" />
+	<c:set var="lastNum" value="23" />
+	
+		<c:if test="${startNum>1}">
+		<a class="btn btn-prev" href="?p=${startNum-1}&t=&q=">이전</a>
+		</c:if>
+		<c:if test="${startNum<=1}">
 		<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
+		</c:if>
 		
 	</div>
 	<ul class="-list- center">
 		<c:forEach var="i" begin="0" end="4">
-		<li><a class="-text- orange bold" href="?p=${1+i}&t=&q=" >${1+i}</a></li>
+		<li><a class="-text- orange bold" href="?p=${startNum+i}&t=&q=" >${startNum+i}</a></li>
 		</c:forEach>		
 	</ul>
 	<div>
-		
-		
+			<c:if test="${startNum+5<lastNum}">
+			<a href="?p=${startNum+5}&t=&q=" class="btn btn-next" >다음</a>
+			</c:if>
+			<c:if test="${startNum+5>=lastNum}">
 			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-		
+			</c:if>
 	</div>
 	
 			</div>
